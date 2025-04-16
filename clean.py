@@ -4,7 +4,7 @@ import numpy as np
 # Charger le fichier CSV
 df = pd.read_csv("student_depression_dataset1.csv")
 print(df)
-df['id'] = range(1, len(df) + 1)
+#df['id'] = range(1, len(df) + 1)
 # Remplacer les valeurs non valides par NaN
 """df.replace(["N/A", "n/a", "--", "?"], np.nan, inplace=True)
 # Nettoyer d'abord les valeurs de "Sleep Duration" avant de les convertir
@@ -43,7 +43,22 @@ df.dropna(how='all', inplace=True)
 
 # Supprimer les doublons éventuels
 df.drop_duplicates(inplace=True)
+
+df['Age'] = df['Age'].astype(str).str.replace(' ', '', regex=True)
+
+# Convertir la colonne 'Age' en entier (int)
+df['Age'] = pd.to_numeric(df['Age'], errors='coerce').fillna(0).astype(int)
+
+# Remplace les valeurs non numériques par NaN
+df['Financial Stress'] = pd.to_numeric(df['Financial Stress'], errors='coerce')
+
+# Remplace les NaN par une valeur par défaut (ex : 0) OU drop les lignes
+df['Financial Stress'] = df['Financial Stress'].fillna(0)
+
+# Convertit en entier
+df['Financial Stress'] = df['Financial Stress'].astype(int)
 """
-print(df)
+print(df['CGPA'].unique())
+
 # Sauvegarder un nouveau fichier propre
-df.to_csv("student_depression_dataset1_clean.csv", index=False)
+df.to_csv("student_depression_dataset1.csv", index=False)
